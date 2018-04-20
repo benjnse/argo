@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.session", []);
-
-}());
+import "./session.service.js";

@@ -1,7 +1,3 @@
-"use strict";
+import { OrdersComponent } from "./orders.component.js";
 
-(function () {
-    angular
-        .module("components.orders", []);
-
-}());
+OrdersComponent.bootstrap();

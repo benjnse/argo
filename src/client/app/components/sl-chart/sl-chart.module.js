@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.sl-chart", []);
-
-}());
+import "./sl-chart.element.js";

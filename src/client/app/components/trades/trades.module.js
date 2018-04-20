@@ -1,7 +1,3 @@
-"use strict";
+import { TradesComponent } from "./trades.component.js";
 
-(function () {
-    angular
-        .module("components.trades", []);
-
-}());
+TradesComponent.bootstrap();

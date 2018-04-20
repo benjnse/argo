@@ -1,43 +1,42 @@
-"use strict";
+import { Util } from "../../util.js";
+import { SessionService } from "../session/session.service.js";
+import { ToastsService } from "../toasts/toasts.service.js";
 
-(function () {
-    angular
-        .module("components.charts")
-        .factory("chartsService", chartsService);
-
-    chartsService.$inject = ["$http", "sessionService"];
-    function chartsService($http, sessionService) {
-        var service = {
-            getHistQuotes: getHistQuotes
-        };
-
-        return service;
-
-        function getHistQuotes(opt) {
-            return sessionService.isLogged().then(function (credentials) {
-                var instrument = opt && opt.instrument || "EUR_USD",
-                    granularity = opt && opt.granularity || "M5",
-                    count = opt && opt.count || 251,
-                    alignmentTimezone = opt && opt.alignmentTimezone
-                        || "America/New_York",
-                    dailyAlignment = opt && opt.dailyAlignment || "0";
-
-                return $http.post("/api/candles", {
-                    environment: credentials.environment,
-                    token: credentials.token,
-                    instrument: instrument,
-                    granularity: granularity,
-                    count: count,
-                    alignmentTimezone: alignmentTimezone,
-                    dailyAlignment: dailyAlignment
-                }).then(function (candles) {
-                    return candles.data;
-                }).catch(function (err) {
-                    return err.data;
-                });
-            });
+export class ChartsService {
+    constructor(candles) {
+        if (!ChartsService.candles) {
+            ChartsService.candles = candles;
         }
-
     }
 
-}());
+    static getHistQuotes({
+        instrument = "EUR_USD",
+        granularity = "M5",
+        count = 251,
+        dailyAlignment = "0"
+    } = {}) {
+        const credentials = SessionService.isLogged();
+
+        if (!credentials) {
+            return null;
+        }
+
+        return Util.fetch("/api/candles", {
+            method: "post",
+            body: JSON.stringify({
+                environment: credentials.environment,
+                token: credentials.token,
+                instrument,
+                granularity,
+                count,
+                dailyAlignment
+            })
+        }).then(res => res.text()).then(data => {
+            ChartsService.candles.csv = data;
+        }).catch(err => {
+            ToastsService.addToast(err.data);
+        });
+    }
+}
+
+ChartsService.candles = null;

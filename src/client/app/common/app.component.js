@@ -1,12 +1,15 @@
-"use strict";
+import hyperHTML from "hyperHTML";
 
-(function () {
-    var app = {
-        templateUrl: "app/common/app.html",
-        controller: "AppController"
-    };
+import { Util } from "../util.js";
+import { AppTemplate } from "./app.template.js";
+import { AppController } from "./app.controller.js";
 
-    angular
-        .module("common")
-        .component("app", app);
-}());
+export class AppComponent {
+    static bootstrap() {
+        const render = hyperHTML.bind(Util.query("app"));
+
+        this.appController = new AppController(render, AppTemplate);
+    }
+}
+
+AppComponent.bootstrap();

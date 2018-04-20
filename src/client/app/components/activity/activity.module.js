@@ -1,7 +1,3 @@
-"use strict";
+import { ActivityComponent } from "./activity.component.js";
 
-(function () {
-    angular
-        .module("components.activity", []);
-
-}());
+ActivityComponent.bootstrap();

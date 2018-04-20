@@ -1,82 +1,74 @@
-"use strict";
+import "mocha";
+import { assert } from "chai";
 
-describe("accountsService", function () {
-    var api = "/api/account",
-        apiInstruments = "/api/instruments",
-        $httpBackend,
-        sessionService,
-        accountsService;
+import { AccountsService } from "./accounts.service.js";
+import { SessionService } from "../session/session.service.js";
 
-    beforeEach(module("components"));
+const { beforeEach, describe, it } = window;
 
-    beforeEach(inject(function ($injector) {
-        var environment = "my environment",
-            token = "my token",
-            accountId = "my account id";
+describe("AccountsService", () => {
+    const environment = "my environment";
+    const token = "my token";
+    const accountId = "my account id";
 
-        $httpBackend = $injector.get("$httpBackend");
-        accountsService = $injector.get("accountsService");
-        sessionService = $injector.get("sessionService");
+    beforeEach(() => {
+        const apiAccount = "/api/account";
+        const apiInstruments = "/api/instruments";
 
-        sessionService.setCredentials({
-            environment: environment,
-            token: token,
-            accountId: accountId
+        AccountsService.account = {};
+
+        SessionService.setCredentials({
+            environment,
+            token,
+            accountId
         });
 
-        $httpBackend
-            .when("POST", api)
-            .respond({
-                account: {
-                    currency: "USD",
-                    accountId: 7442890,
-                    balance: 110410.5028,
-                    marginAvailable: 110394.9676,
-                    marginCallMarginUsed: 18.1671,
-                    realizedPL: -1983.78,
-                    unrealizedPL: 2.6319
-                }
-            });
+        fetch.mock(apiAccount, {
+            account: {
+                currency: "USD",
+                accountId: 7442890,
+                balance: 110410.5028,
+                marginAvailable: 110394.9676,
+                marginCallMarginUsed: 18.1671,
+                realizedPL: -1983.78,
+                unrealizedPL: 2.6319,
+                instruments: ["EUR_USD"]
+            }
+        });
 
-        $httpBackend
-            .when("POST", apiInstruments)
-            .respond([
-                {
-                    displayName: "EUR/USD",
-                    name: "EUR_USD",
-                    maximumOrderUnits: "100000000",
-                    pipLocation: -4
-                }
-            ]);
-
-        $httpBackend.whenGET(/^app\/.*\.html$/).respond(200);
-    }));
-
-    afterEach(function () {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        fetch.mock(apiInstruments, [
+            {
+                displayName: "EUR/USD",
+                name: "EUR_USD",
+                maximumOrderUnits: "100000000",
+                pipLocation: -4
+            }
+        ]);
     });
 
-    describe("getAccounts", function () {
-        it("test", function () {
-            accountsService.getAccounts({
-                environment: "my environment",
-                token: "my token",
-                accountId: "my account id"
-            }).then(function () {
-                var account = accountsService.getAccount();
+    it("getAccount", () => {
+        const account = AccountsService.getAccount();
 
-                assert.equal("USD", account.currency);
-                assert.equal("7442890", account.accountId);
-                assert.equal(110410.5028, account.balance);
-                assert.equal(110394.9676, account.marginAvailable);
-                assert.equal(18.1671, account.marginCallMarginUsed);
-                assert.equal(-1983.78, account.realizedPL);
-                assert.equal(2.6319, account.unrealizedPL);
-                assert.isDefined(account.timestamp);
-                assert.equal(0.0023837406163863604, account.unrealizedPLPercent);
-            });
-            $httpBackend.flush();
-        });
+        assert.strictEqual(0, Object.keys(account).length);
+    });
+
+    it("getAccounts", done => {
+        AccountsService.getAccounts({
+            environment,
+            token,
+            accountId
+        }).then(() => {
+            const account = AccountsService.account;
+
+            assert.strictEqual("USD", account.currency);
+            assert.strictEqual(7442890, account.accountId);
+            assert.strictEqual(110410.5028, account.balance);
+            assert.strictEqual(110394.9676, account.marginAvailable);
+            assert.strictEqual(18.1671, account.marginCallMarginUsed);
+            assert.strictEqual(-1983.78, account.realizedPL);
+            assert.strictEqual(2.6319, account.unrealizedPL);
+            assert.strictEqual(true, account.timestamp !== null);
+            assert.strictEqual(0.0023837406163863604, account.unrealizedPLPercent);
+        }).then(done).catch(done);
     });
 });

@@ -1,7 +1,3 @@
-"use strict";
+import { PositionsComponent } from "./positions.component.js";
 
-(function () {
-    angular
-        .module("components.positions", []);
-
-}());
+PositionsComponent.bootstrap();

@@ -1,36 +1,21 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.session")
-        .factory("sessionService", sessionService);
-
-    sessionService.$inject = ["$q"];
-    function sessionService($q) {
-        var deferred = $q.defer(),
-            credentials = {
-                environment: null,
-                token: null,
-                accountId: null
-            },
-            service = {
-                setCredentials: setCredentials,
-                isLogged: isLogged
-            };
-
-        return service;
-
-        function setCredentials(session) {
-            credentials.environment = session.environment;
-            credentials.token = session.token;
-            credentials.accountId = session.accountId;
-
-            deferred.resolve(credentials);
-        }
-
-        function isLogged() {
-            return deferred.promise;
-        }
+export class SessionService {
+    static setCredentials(session) {
+        SessionService.credentials.environment = session.environment;
+        SessionService.credentials.token = session.token;
+        SessionService.credentials.accountId = session.accountId;
     }
 
-}());
+    static isLogged() {
+        if (SessionService.credentials.token) {
+            return SessionService.credentials;
+        }
+
+        return null;
+    }
+}
+
+SessionService.credentials = {
+    environment: null,
+    token: null,
+    accountId: null
+};

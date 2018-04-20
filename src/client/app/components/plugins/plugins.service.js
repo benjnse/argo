@@ -1,77 +1,83 @@
-"use strict";
+import { Util } from "../../util.js";
+import { SessionService } from "../session/session.service.js";
+import { AccountsService } from "../account/accounts.service.js";
 
-(function () {
-    angular
-        .module("components.plugins")
-        .factory("pluginsService", pluginsService);
-
-    pluginsService.$inject = ["$http", "sessionService", "accountsService"];
-    function pluginsService($http, sessionService, accountsService) {
-        var plugins = {},
-            pluginsInfo = {
-                count: 0
-            },
-            service = {
-                getPlugins: getPlugins,
-                getPluginsInfo: getPluginsInfo,
-                engagePlugins: engagePlugins,
-                refresh: refresh
-            };
-
-        return service;
-
-        function getPlugins() {
-            return plugins;
+export class PluginsService {
+    constructor(pluginsState) {
+        if (!PluginsService.plugins) {
+            PluginsService.plugins = pluginsState.plugins;
+            PluginsService.pluginsInfo = pluginsState.pluginsInfo;
         }
-
-        function getPluginsInfo() {
-            return pluginsInfo;
-        }
-
-        function refresh() {
-            sessionService.isLogged().then(function (credentials) {
-                $http.post("/api/plugins", {
-                    environment: credentials.environment,
-                    token: credentials.token,
-                    accountId: credentials.accountId
-                }).then(function (res) {
-                    var name;
-
-                    for (name in plugins) {
-                        if (plugins.hasOwnProperty(name)) {
-                            delete plugins[name];
-                        }
-                    }
-                    angular.extend(plugins, res.data);
-                    pluginsInfo.count = Object.keys(plugins).length;
-
-                    Object.keys(plugins).forEach(function (key) {
-                        if (plugins[key] === "enabled") {
-                            plugins[key] = true;
-                        } else {
-                            plugins[key] = false;
-                        }
-                    });
-                });
-            });
-        }
-
-        function engagePlugins(plugs) {
-            sessionService.isLogged().then(function (credentials) {
-                var account = accountsService.getAccount();
-
-                $http.post("/api/engageplugins", {
-                    environment: credentials.environment,
-                    token: credentials.token,
-                    accountId: credentials.accountId,
-                    plugins: plugs,
-                    config: {
-                        pips: account.pips
-                    }
-                });
-            });
-        }
-
     }
 
-}());
+    static getPlugins() {
+        return PluginsService.plugins;
+    }
+
+    static getPluginsInfo() {
+        return PluginsService.pluginsInfo;
+    }
+
+    static refresh() {
+        const credentials = SessionService.isLogged();
+
+        if (!credentials) {
+            return null;
+        }
+
+        return Util.fetch("/api/plugins", {
+            method: "post",
+            body: JSON.stringify({
+                environment: credentials.environment,
+                token: credentials.token,
+                accountId: credentials.accountId
+            })
+        }).then(res => res.json()).then(data => {
+            for (const name in PluginsService.plugins) {
+                if (PluginsService.plugins[name].toString()) {
+                    delete PluginsService.plugins[name];
+                }
+            }
+
+            Object.assign(PluginsService.plugins, data);
+
+            PluginsService.pluginsInfo.count = Object.keys(
+                PluginsService.plugins
+            ).length;
+
+            Object.keys(PluginsService.plugins).forEach(key => {
+                if (PluginsService.plugins[key] === "enabled") {
+                    PluginsService.plugins[key] = true;
+                } else {
+                    PluginsService.plugins[key] = false;
+                }
+            });
+        });
+    }
+
+    static engagePlugins(plugs) {
+        const credentials = SessionService.isLogged();
+
+        if (!credentials) {
+            return;
+        }
+
+        const account = AccountsService.getAccount();
+
+        Util.fetch("/api/engageplugins", {
+            method: "post",
+            body: JSON.stringify({
+                environment: credentials.environment,
+                token: credentials.token,
+                accountId: credentials.accountId,
+                plugins: plugs,
+                config: {
+                    pips: account.pips
+                }
+            })
+        });
+    }
+}
+
+PluginsService.plugins = null;
+PluginsService.pluginsInfo = null;

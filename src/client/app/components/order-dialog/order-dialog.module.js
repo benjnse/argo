@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.order-dialog", []);
-
-}());
+import "./order-dialog.component.js";

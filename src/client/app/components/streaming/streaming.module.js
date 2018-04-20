@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.streaming", []);
-
-}());
+import "./streaming.service.js";

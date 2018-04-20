@@ -1,7 +1,3 @@
-"use strict";
+import { HeaderComponent } from "./header.component.js";
 
-(function () {
-    angular
-        .module("components.header", []);
-
-}());
+HeaderComponent.bootstrap();

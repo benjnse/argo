@@ -1,7 +1,3 @@
-"use strict";
+import { ExposureComponent } from "./exposure.component.js";
 
-(function () {
-    angular
-        .module("components.exposure", []);
-
-}());
+ExposureComponent.bootstrap();

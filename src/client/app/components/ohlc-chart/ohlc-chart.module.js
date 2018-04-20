@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.ohlc-chart", []);
-
-}());
+import "./ohlc-chart.element.js";

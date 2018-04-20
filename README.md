@@ -1,21 +1,16 @@
 # ARGO
 
 [![NPM version](https://badge.fury.io/js/argo-trading.png)](http://badge.fury.io/js/argo-trading)
-[![NGN Dependencies](https://david-dm.org/albertosantini/argo.png)](https://david-dm.org/albertosantini/argo)
 [![Build Status](https://travis-ci.org/albertosantini/argo.png)](https://travis-ci.org/albertosantini/argo)
-[![Known Vulnerabilities](https://snyk.io/test/npm/argo-trading/badge.svg)](https://snyk.io/test/npm/argo-trading)
 
 **Argo** is an open source trading platform, connecting directly with [OANDA][]
 through the powerful [API][] to develop trading strategies.
 
 ## Installation
 
-[![NPM](https://nodei.co/npm/argo-trading.png?downloads=true&downloadRank=true)](https://nodei.co/npm/argo-trading/)
-[![NPM](https://nodei.co/npm-dl/argo-trading.png)](https://nodei.co/npm/argo-trading/)
-
 After installing [Node.js](https://nodejs.org/) (required), you can install **Argo**.
 
-- Release 3.x for legacy accounts.
+- Release 3.x for legacy accounts: if your account id contains only digits (ie. 2534233), it is a legacy account.
 - Release 4.x (or higher) for v20 accounts.
 
 ```
@@ -35,9 +30,9 @@ Eventually point your web brower to `http://localhost:8000`.
 $ argo-trading-standalone
 ```
 
-Tested locally with Node.js 6.x, AngularJS 1.5.x and Material 1.x.
+Tested locally with Node.js 9.x, hyperHTML 2.x.
 
-## [Basic features](docs/views)
+## Basic features
 
 - Account summary updated for each event.
 - Quotes and spreads list updated tick-by-tick.
@@ -50,11 +45,11 @@ Tested locally with Node.js 6.x, AngularJS 1.5.x and Material 1.x.
 - Transactions history.
 - Economic calendar.
 
-## [Advanced features](https://github.com/albertosantini/argo-trading-plugin-seed)
+## Advanced features
 
-- Executing trading strategies.
+- Executing trading strategies with [plugins](https://github.com/albertosantini/argo-trading-plugin-seed).
 
-## [Documentation](http://argo.rtfd.io/)
+## [Documentation](http://argo.js.org/docs/)
 
 ## [Contributing](CONTRIBUTING.md)
 

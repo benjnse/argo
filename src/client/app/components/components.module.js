@@ -1,30 +1,20 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components", [
-            "components.account",
-            "components.accounts-bottomsheet",
-            "components.activity",
-            "components.charts",
-            "components.dualcolor",
-            "components.exposure",
-            "components.header",
-            "components.highlighter",
-            "components.news",
-            "components.ohlc-chart",
-            "components.order-dialog",
-            "components.orders",
-            "components.plugins",
-            "components.positions",
-            "components.quotes",
-            "components.session",
-            "components.settings-dialog",
-            "components.sl-chart",
-            "components.streaming",
-            "components.toast",
-            "components.token-dialog",
-            "components.trades"
-        ]);
-
-}());
+import "./account/account.module.js";
+import "./activity/activity.module.js";
+import "./charts/charts.module.js";
+import "./exposure/exposure.module.js";
+import "./header/header.module.js";
+import "./news/news.module.js";
+import "./ohlc-chart/ohlc-chart.module.js";
+import "./order-dialog/order-dialog.module.js";
+import "./orders/orders.module.js";
+import "./plugins/plugins.module.js";
+import "./positions/positions.module.js";
+import "./quotes/quotes.module.js";
+import "./session/session.module.js";
+import "./settings-dialog/settings-dialog.module.js";
+import "./sl-chart/sl-chart.module.js";
+import "./streaming/streaming.module.js";
+import "./toasts/toasts.module.js";
+import "./token-dialog/token-dialog.module.js";
+import "./trades/trades.module.js";
+import "./yesno-dialog/yesno-dialog.module.js";

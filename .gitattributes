@@ -1,3 +1,6 @@
-* text=auto
+* text=auto         eol=lf
 
-bin/*   eol=lf
+bin/*               eol=lf
+build/*             eol=lf
+package.json        eol=lf
+package-lock.json   eol=lf

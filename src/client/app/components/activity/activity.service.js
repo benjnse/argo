@@ -1,54 +1,54 @@
-"use strict";
+import { Util } from "../../util.js";
+import { SessionService } from "../session/session.service.js";
+import { AccountsService } from "../account/accounts.service.js";
 
-(function () {
-    angular
-        .module("components.activity")
-        .factory("activityService", activityService);
-
-    activityService.$inject = ["$http", "sessionService", "accountsService"];
-    function activityService($http, sessionService, accountsService) {
-        var activities = [],
-            service = {
-                getActivities: getActivities,
-                addActivity: addActivity
-            };
-
-        return service;
-
-        function getActivities() {
-            var account = accountsService.getAccount(),
-                lastTransactionID = account.lastTransactionID;
-
-            return sessionService.isLogged().then(function (credentials) {
-                return $http.post("/api/transactions", {
-                    environment: credentials.environment,
-                    token: credentials.token,
-                    accountId: credentials.accountId,
-                    lastTransactionID: lastTransactionID
-                }).then(function (transactions) {
-                    activities = transactions.data.reverse();
-
-                    return activities;
-                }).catch(function (err) {
-                    return err.data;
-                });
-            });
-        }
-
-        function addActivity(activity) {
-            activities.splice(0, 0, {
-                id: activity.id,
-                type: activity.type,
-                instrument: activity.instrument,
-                units: activity.units,
-                price: activity.price,
-                pl: activity.pl,
-                // PROFIT (PIPS)
-                // PROFIT (%)
-                accountBalance: activity.accountBalance,
-                time: activity.time
-            });
+export class ActivityService {
+    constructor(activities) {
+        if (!ActivityService.activities) {
+            ActivityService.activities = activities;
         }
     }
 
-}());
+    static refresh() {
+        const credentials = SessionService.isLogged();
+
+        if (!credentials) {
+            return null;
+        }
+
+        const account = AccountsService.getAccount(),
+            lastTransactionID = account.lastTransactionID;
+
+        return Util.fetch("/api/transactions", {
+            method: "post",
+            body: JSON.stringify({
+                environment: credentials.environment,
+                token: credentials.token,
+                accountId: credentials.accountId,
+                lastTransactionID
+            })
+        }).then(res => res.json()).then(data => {
+            ActivityService.activities.length = 0;
+            data.reverse().forEach(activity => {
+                ActivityService.activities.push(activity);
+            });
+
+            return ActivityService.activities;
+        }).catch(err => err.data);
+    }
+
+    static addActivity(activity) {
+        ActivityService.activities.splice(0, 0, {
+            id: activity.id,
+            type: activity.type,
+            instrument: activity.instrument,
+            units: activity.units,
+            price: activity.price,
+            pl: activity.pl,
+            accountBalance: activity.accountBalance,
+            time: activity.time
+        });
+    }
+}
+
+ActivityService.activities = null;

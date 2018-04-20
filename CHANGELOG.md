@@ -1,3 +1,125 @@
+<a name="6.0.3"></a>
+## [6.0.3](https://github.com/albertosantini/argo/compare/v6.0.2...v6.0.3) (2018-03-15)
+
+
+### Bug Fixes
+
+* **server:** fix message error in uncaught exception ([f26dfd5](https://github.com/albertosantini/argo/commit/f26dfd5))
+
+
+
+<a name="6.0.2"></a>
+## [6.0.2](https://github.com/albertosantini/argo/compare/v6.0.1...v6.0.2) (2018-01-23)
+
+
+
+<a name="6.0.1"></a>
+## [6.0.1](https://github.com/albertosantini/argo/compare/v6.0.0...v6.0.1) (2018-01-08)
+
+
+### Bug Fixes
+
+* **quotes:** fix quotes highlighting ([6275f43](https://github.com/albertosantini/argo/commit/6275f43))
+* **token-dialog:** display token button when it fails ([d327789](https://github.com/albertosantini/argo/commit/d327789))
+
+
+### Performance Improvements
+
+* **quotes:** improve highlighter ([e8819aa](https://github.com/albertosantini/argo/commit/e8819aa))
+
+
+
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/albertosantini/argo/compare/v5.0.2...v6.0.0) (2017-12-06)
+
+
+### Bug Fixes
+
+* **api:** use message in code property ([5ece339](https://github.com/albertosantini/argo/commit/5ece339))
+* **css:** remove useless property ([d0e7288](https://github.com/albertosantini/argo/commit/d0e7288))
+
+
+### Features
+
+* **hyperHTML:** replace AngularJS with hyperHTML ([a0e5c93](https://github.com/albertosantini/argo/commit/a0e5c93))
+
+
+
+<a name="5.0.2"></a>
+## [5.0.2](https://github.com/albertosantini/argo/compare/v5.0.1...v5.0.2) (2017-04-21)
+
+
+### Bug Fixes
+
+* **streaming:** fix bid and ask price ([86e75ae](https://github.com/albertosantini/argo/commit/86e75ae))
+* **token-dialog:** fix login cancel ([64de056](https://github.com/albertosantini/argo/commit/64de056))
+
+
+
+<a name="5.0.1"></a>
+## [5.0.1](https://github.com/albertosantini/argo/compare/v5.0.0...v5.0.1) (2017-04-03)
+
+
+### Bug Fixes
+
+* **ohlc:** fix again date value for candles ([e59cadf](https://github.com/albertosantini/argo/commit/e59cadf))
+
+
+
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/albertosantini/argo/compare/v4.4.0...v5.0.0) (2017-03-22)
+
+
+### Bug Fixes
+
+* **api:** improve error message handler ([5396ee6](https://github.com/albertosantini/argo/commit/5396ee6))
+* **app:** fix app layout ([c9f6f60](https://github.com/albertosantini/argo/commit/c9f6f60))
+* **charts:** fix alignmentTimezone in candles request ([3db5421](https://github.com/albertosantini/argo/commit/3db5421))
+* **charts:** fix candles chart ([e6a4a18](https://github.com/albertosantini/argo/commit/e6a4a18))
+* **charts:** fix sell button ([813776f](https://github.com/albertosantini/argo/commit/813776f))
+* **charts:** when mobile ohlc chart is hidden ([48aedcd](https://github.com/albertosantini/argo/commit/48aedcd))
+* **news:** fix timestamp ([3b77f8e](https://github.com/albertosantini/argo/commit/3b77f8e))
+* **order-dialog:** close if pips are not avalable ([f5ac2e0](https://github.com/albertosantini/argo/commit/f5ac2e0))
+* **order-dialog:** fix message error ([11b7b1b](https://github.com/albertosantini/argo/commit/11b7b1b))
+* **orders:** add error handling when closing ([5a01760](https://github.com/albertosantini/argo/commit/5a01760))
+* **orders:** fix order.type in wrong field ([2d2ed31](https://github.com/albertosantini/argo/commit/2d2ed31))
+* **spinner:** use tachyons in the spinner ([812eb36](https://github.com/albertosantini/argo/commit/812eb36))
+* **tabs:** align text right for contentv in tabs ([e8db1a3](https://github.com/albertosantini/argo/commit/e8db1a3))
+* **tabs:** center message whit no content ([cbba541](https://github.com/albertosantini/argo/commit/cbba541))
+* **token-dialog:** raise error if no account ([6595574](https://github.com/albertosantini/argo/commit/6595574))
+* **trades:** fix typo in closing dialog ([596f494](https://github.com/albertosantini/argo/commit/596f494))
+
+
+### Features
+
+* **build:** prepare d3 bundle for techan ([80f6308](https://github.com/albertosantini/argo/commit/80f6308))
+* **build:** remove simple-modal dep ([0724004](https://github.com/albertosantini/argo/commit/0724004))
+* **material:** remove material dep ([fc0a8b0](https://github.com/albertosantini/argo/commit/fc0a8b0))
+* **simple-modal:** add simple-modal script ([0e6718e](https://github.com/albertosantini/argo/commit/0e6718e))
+
+
+
+<a name="4.4.0"></a>
+# [4.4.0](https://github.com/albertosantini/argo/compare/v4.3.0...v4.4.0) (2017-02-22)
+
+
+### Bug Fixes
+
+* **activity:** move initialization to the constructor ([243cb59](https://github.com/albertosantini/argo/commit/243cb59))
+* **build:** load d3 and techan lib via script tags ([ad4e282](https://github.com/albertosantini/argo/commit/ad4e282))
+* **header:** fix escaping from settings dialog ([38db7f7](https://github.com/albertosantini/argo/commit/38db7f7))
+* **header:** fix escaping from token dialog ([6c8c786](https://github.com/albertosantini/argo/commit/6c8c786))
+* **sl-chart:** fix sparkline height in IE ([e9e1061](https://github.com/albertosantini/argo/commit/e9e1061))
+
+
+### Features
+
+* **build:** add webpack with ES2015 modules ([19e07a5](https://github.com/albertosantini/argo/commit/19e07a5))
+* **build:** replace webpack with rollup ([c07db8b](https://github.com/albertosantini/argo/commit/c07db8b))
+* **core:** use ES2015 ([ee410ae](https://github.com/albertosantini/argo/commit/ee410ae))
+
+
+
 <a name="4.3.0"></a>
 # [4.3.0](https://github.com/albertosantini/argo/compare/v4.2.0...v4.3.0) (2016-12-15)
 

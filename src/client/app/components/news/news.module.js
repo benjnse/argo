@@ -1,7 +1,3 @@
-"use strict";
+import { NewsComponent } from "./news.component.js";
 
-(function () {
-    angular
-        .module("components.news", []);
-
-}());
+NewsComponent.bootstrap();

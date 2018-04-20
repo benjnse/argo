@@ -1,19 +1,5 @@
+parserOptions:
+    sourceType: "module"
+
 env:
     browser: true
-    mocha: true
-
-rules:
-    angular/controller-name:
-        - 2
-        - "/[A-Z].*$/"
-
-globals:
-    angular: false
-    d3: false
-    techan: false
-
-    assert: false
-    inject: false
-
-plugins:
-    - angular

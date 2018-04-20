@@ -1,7 +1,3 @@
-"use strict";
+import { PluginsComponent } from "./plugins.component.js";
 
-(function () {
-    angular
-        .module("components.plugins", []);
-
-}());
+PluginsComponent.bootstrap();

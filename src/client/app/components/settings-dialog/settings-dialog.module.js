@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.settings-dialog", []);
-
-}());
+import "./settings-dialog.component.js";

@@ -1,11 +1,14 @@
-"use strict";
+import hyperHTML from "hyperHTML";
 
-(function () {
-    var root = {
-        templateUrl: "app/root.html"
-    };
+import { Util } from "./util.js";
+import { RootTemplate } from "./root.template.js";
 
-    angular
-        .module("root")
-        .component("root", root);
-}());
+export class RootComponent {
+    static bootstrap() {
+        const render = hyperHTML.bind(Util.query("root"));
+
+        RootTemplate.update(render);
+    }
+}
+
+RootComponent.bootstrap();

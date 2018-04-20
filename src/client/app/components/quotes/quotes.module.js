@@ -1,7 +1,3 @@
-"use strict";
+import { QuotesComponent } from "./quotes.component.js";
 
-(function () {
-    angular
-        .module("components.quotes", []);
-
-}());
+QuotesComponent.bootstrap();

@@ -1,7 +1,3 @@
-"use strict";
+import { AccountComponent } from "./account.component.js";
 
-(function () {
-    angular
-        .module("components.account", []);
-
-}());
+AccountComponent.bootstrap();

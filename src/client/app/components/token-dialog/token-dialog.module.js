@@ -1,7 +1,1 @@
-"use strict";
-
-(function () {
-    angular
-        .module("components.token-dialog", []);
-
-}());
+import "./token-dialog.component.js";

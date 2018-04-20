@@ -1,62 +1,44 @@
-"use strict";
+import { AccountsService } from "../account/accounts.service.js";
 
-(function () {
-    angular
-        .module("components.quotes")
-        .factory("quotesService", quotesService);
-
-    quotesService.$inject = ["accountsService"];
-    function quotesService(accountsService) {
-        var quotes = {},
-            service = {
-                getQuotes: getQuotes,
-                updateTick: updateTick,
-                reset: reset
-            };
-
-        return service;
-
-        function getQuotes() {
-            return quotes;
+export class QuotesService {
+    constructor(quotes) {
+        if (!QuotesService.quotes) {
+            QuotesService.quotes = quotes;
         }
-
-        function updateTick(tick) {
-            var account = accountsService.getAccount(),
-                streamingInstruments = account.streamingInstruments,
-                pips = account.pips,
-                instrument = tick.instrument;
-
-            quotes[instrument] = {
-                time: tick.time,
-                ask: tick.ask,
-                bid: tick.bid,
-                spread: ((tick.ask - tick.bid) / pips[instrument]).toFixed(1)
-            };
-
-
-            if (!angular.equals(streamingInstruments, Object.keys(quotes))) {
-                streamingInstruments.forEach(function (instr) {
-                    var temp;
-
-                    if (quotes.hasOwnProperty(instr)) {
-                        temp = quotes[instr];
-                        delete quotes[instr];
-                        quotes[instr] = temp;
-                    }
-                });
-            }
-        }
-
-        function reset() {
-            var key;
-
-            for (key in quotes) {
-                if (quotes.hasOwnProperty(key)) {
-                    delete quotes[key];
-                }
-            }
-        }
-
     }
 
-}());
+    static getQuotes() {
+        return QuotesService.quotes;
+    }
+
+    static updateTick(tick) {
+        const account = AccountsService.getAccount(),
+            streamingInstruments = account.streamingInstruments,
+            pips = account.pips,
+            instrument = tick.instrument,
+            lenStreamingInstruments = Object.keys(streamingInstruments).length,
+            lenQuotesInstruments = Object.keys(QuotesService.quotes).length;
+
+        if (lenStreamingInstruments !== lenQuotesInstruments) {
+            streamingInstruments.forEach(instr => {
+                QuotesService.quotes[instr].instrument = instr;
+            });
+        }
+
+        QuotesService.quotes[instrument].time = tick.time;
+        QuotesService.quotes[instrument].ask = tick.ask;
+        QuotesService.quotes[instrument].bid = tick.bid;
+        QuotesService.quotes[instrument].spread =
+            ((tick.ask - tick.bid) / pips[instrument]).toFixed(1);
+    }
+
+    static reset() {
+        for (const instr in QuotesService.quotes) {
+            if (QuotesService.quotes[instr].instrument === instr) {
+                delete QuotesService.quotes[instr];
+            }
+        }
+    }
+}
+
+QuotesService.quotes = null;

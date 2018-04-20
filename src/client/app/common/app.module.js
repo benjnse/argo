@@ -1,6 +1,1 @@
-"use strict";
-
-angular
-    .module("common", [
-        "ngMaterial"
-    ]);
+import "./app.component.js";

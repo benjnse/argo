@@ -1,11 +1,12 @@
 "use strict";
 
-var path = require("path");
+const path = require("path");
 
 exports.port = process.env.ARGO_PORT || 8000;
 
 exports.staticFiles = path.resolve(__dirname, "../../client/");
 exports.vendorFiles = path.resolve(__dirname, "../../../node_modules/");
+exports.buildFiles = path.resolve(__dirname, "../../../build/");
 
 exports.apiUrl = "/api";
 exports.streamUrl = "/stream";
@@ -30,7 +31,7 @@ exports.instruments = [
 exports.getUrl = getUrl;
 
 function getUrl(environment, type) {
-    var endpoints = {
+    const endpoints = {
         live: {
             stream: "https://stream-fxtrade.oanda.com",
             api: "https://api-fxtrade.oanda.com"

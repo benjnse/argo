@@ -1,94 +1,92 @@
-"use strict";
+import { Util } from "../../util.js";
+import { SessionService } from "../session/session.service.js";
 
-(function () {
-    angular
-        .module("components.account")
-        .factory("accountsService", accountsService);
-
-    accountsService.$inject = ["$http", "sessionService"];
-    function accountsService($http, sessionService) {
-        var account = {},
-            service = {
-                getAccount: getAccount,
-                getAccounts: getAccounts,
-                refresh: refresh,
-                setStreamingInstruments: setStreamingInstruments
-            };
-
-        return service;
-
-        function getAccount() {
-            return account;
+export class AccountsService {
+    constructor(account) {
+        if (!AccountsService.account) {
+            AccountsService.account = account;
         }
-
-        function refresh() {
-            sessionService.isLogged().then(function (credentials) {
-                getAccounts({
-                    environment: credentials.environment,
-                    token: credentials.token,
-                    accountId: credentials.accountId
-                });
-            });
-        }
-
-        function getAccounts(data) {
-            var environment = data.environment || "practice",
-                token = data.token,
-                accountId = data.accountId,
-                api = accountId ? "/api/account" : "/api/accounts";
-
-            return $http.post(api, {
-                environment: environment,
-                token: token,
-                accountId: accountId
-            }).then(function (response) {
-                var accounts = response.data.accounts || response.data;
-
-                if (response.data.message) {
-                    throw response.data.message;
-                }
-
-                if (!accounts.length) {
-                    angular.merge(account, response.data.account);
-
-                    account.timestamp = new Date();
-
-                    account.unrealizedPLPercent =
-                        account.unrealizedPL / account.balance * 100;
-
-                    if (!account.instruments) {
-                        $http.post("/api/instruments", {
-                            environment: environment,
-                            token: token,
-                            accountId: accountId
-                        }).then(function (instruments) {
-                            account.instruments = instruments.data;
-                            account.pips = {};
-                            angular.forEach(account.instruments, function (i) {
-                                account.pips[i.name] =
-                                    Math.pow(10, i.pipLocation);
-                            });
-                        });
-                    }
-                }
-
-                return accounts;
-            });
-        }
-
-        function setStreamingInstruments(settings) {
-            account.streamingInstruments = Object.keys(settings)
-                .filter(function (el) {
-                    if (settings[el]) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
-
-            return account.streamingInstruments;
-        }
-
     }
 
-}());
+    static getAccount() {
+        return AccountsService.account;
+    }
+
+    static refresh() {
+        const credentials = SessionService.isLogged();
+
+        if (!credentials) {
+            return;
+        }
+
+        AccountsService.getAccounts({
+            environment: credentials.environment,
+            token: credentials.token,
+            accountId: credentials.accountId
+        });
+    }
+
+    static getAccounts({
+        environment = "practice",
+        token = "abc",
+        accountId = null
+    } = {}) {
+        const api = accountId ? "/api/account" : "/api/accounts";
+
+        return Util.fetch(api, {
+            method: "post",
+            body: JSON.stringify({
+                environment,
+                token,
+                accountId
+            })
+        }).then(res => res.json()).then(data => {
+            const accounts = data.accounts || data;
+
+            if (data.message) {
+                throw data.message;
+            }
+
+            if (!accounts.length) {
+                Object.assign(AccountsService.account, data.account);
+
+                AccountsService.account.timestamp = new Date();
+
+                AccountsService.account.unrealizedPLPercent =
+                    AccountsService.account.unrealizedPL /
+                        AccountsService.account.balance * 100;
+
+                if (!Object.keys(AccountsService.account.instruments).length) {
+                    Util.fetch("/api/instruments", {
+                        method: "post",
+                        body: JSON.stringify({
+                            environment,
+                            token,
+                            accountId
+                        })
+                    }).then(res => res.json()).then(instruments => {
+                        AccountsService.account.instruments = instruments;
+                        AccountsService.account.pips = {};
+                        AccountsService.account.instruments.forEach(i => {
+                            AccountsService.account.pips[i.name] =
+                                Math.pow(10, i.pipLocation);
+                        });
+
+                        return AccountsService.account;
+                    });
+                }
+            }
+
+            return accounts;
+        });
+    }
+
+    static setStreamingInstruments(settings) {
+        AccountsService.account.streamingInstruments = Object.keys(settings)
+            .filter(el => !!settings[el]);
+
+        return AccountsService.account.streamingInstruments;
+    }
+}
+
+AccountsService.account = null;

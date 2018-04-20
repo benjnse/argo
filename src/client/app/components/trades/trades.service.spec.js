@@ -1,86 +1,72 @@
-"use strict";
+import "mocha";
+import { assert } from "chai";
 
-describe("tradesService", function () {
-    var api = "/api/trades",
-        $httpBackend,
-        sessionService,
-        tradesService;
+import { TradesService } from "./trades.service.js";
+import { SessionService } from "../session/session.service.js";
 
-    beforeEach(module("components"));
+const { beforeEach, describe, it } = window;
 
-    beforeEach(inject(function ($injector) {
-        var environment = "my environment",
-            token = "my token",
-            accountId = "my account id";
+describe("tradesService", () => {
+    const environment = "my environment";
+    const token = "my token";
+    const accountId = "my account id";
+    const mockedTrades = [
+        {
+            id: 175427743,
+            units: 2,
+            side: "sell",
+            instrument: "EUR_USD",
+            time: "2014-02-13T17:47:57Z",
+            price: 1.36687,
+            takeProfit: 0,
+            stopLoss: 0,
+            trailingStop: 0,
+            trailingAmount: 0
+        },
+        {
+            id: 175427742,
+            units: 2,
+            side: "sell",
+            instrument: "EUR_USD",
+            time: "2014-02-13T17:47:56Z",
+            price: 1.36687,
+            takeProfit: 0,
+            stopLoss: 0,
+            trailingStop: 0,
+            trailingAmount: 0
+        }
+    ];
 
-        $httpBackend = $injector.get("$httpBackend");
-        tradesService = $injector.get("tradesService");
-        sessionService = $injector.get("sessionService");
 
-        sessionService.setCredentials({
-            environment: environment,
-            token: token,
-            accountId: accountId
+    beforeEach(() => {
+        const apiTrades = "/api/trades";
+
+        /* eslint no-new:off */
+        new TradesService({ value: [] });
+
+        SessionService.setCredentials({
+            environment,
+            token,
+            accountId
         });
 
-        $httpBackend
-            .when("POST", api)
-            .respond([
-                {
-                    "id": 175427743,
-                    "units": 2,
-                    "side": "sell",
-                    "instrument": "EUR_USD",
-                    "time": "2014-02-13T17:47:57Z",
-                    "price": 1.36687,
-                    "takeProfit": 0,
-                    "stopLoss": 0,
-                    "trailingStop": 0,
-                    "trailingAmount": 0
-                },
-                {
-                    "id": 175427742,
-                    "units": 2,
-                    "side": "sell",
-                    "instrument": "EUR_USD",
-                    "time": "2014-02-13T17:47:56Z",
-                    "price": 1.36687,
-                    "takeProfit": 0,
-                    "stopLoss": 0,
-                    "trailingStop": 0,
-                    "trailingAmount": 0
-                }
-            ]);
-
-        $httpBackend.whenGET(/^app\/.*\.html$/).respond(200);
-    }));
-
-    afterEach(function () {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        fetch.mock(apiTrades, mockedTrades);
     });
 
-    describe("refresh", function () {
-        it("test", function () {
-            var trades;
-
-            tradesService.refresh();
-            $httpBackend.flush();
-
-            trades = tradesService.getTrades();
-
+    it("getTrades", done => {
+        TradesService.refresh().then(trades => {
             assert.lengthOf(trades, 2);
 
-            assert.equal(175427743, trades[0].id);
-            assert.equal(2, trades[0].units);
-            assert.equal("sell", trades[0].side);
-            assert.equal("EUR_USD", trades[0].instrument);
-            assert.equal("2014-02-13T17:47:57Z", trades[0].time);
-            assert.equal(1.36687, trades[0].price);
-            assert.equal(0, trades[0].takeProfit);
-            assert.equal(0, trades[0].stopLoss);
-            assert.equal(0, trades[0].trailingStop);
-            assert.equal(0, trades[0].trailingAmount);
-        });
+            assert.strictEqual(175427743, trades[0].id);
+            assert.strictEqual(2, trades[0].units);
+            assert.strictEqual("sell", trades[0].side);
+            assert.strictEqual("EUR_USD", trades[0].instrument);
+            assert.strictEqual("2014-02-13T17:47:57Z", trades[0].time);
+            assert.strictEqual(1.36687, trades[0].price);
+            assert.strictEqual(0, trades[0].takeProfit);
+            assert.strictEqual(0, trades[0].stopLoss);
+            assert.strictEqual(0, trades[0].trailingStop);
+            assert.strictEqual(0, trades[0].trailingAmount);
+        }).then(done).catch(done);
     });
 });
