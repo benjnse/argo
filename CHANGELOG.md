@@ -1,3 +1,30 @@
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/albertosantini/argo/compare/v6.1.0...v6.2.0) (2018-05-21)
+
+
+### Bug Fixes
+
+* **quotes:** fix sparklines ([2b63358](https://github.com/albertosantini/argo/commit/2b63358))
+* **token-dialog:** clear token when dialog cancelled ([9b3e245](https://github.com/albertosantini/argo/commit/9b3e245))
+
+
+### Features
+
+* **deps:** electron 2.0.0 ([fcadce7](https://github.com/albertosantini/argo/commit/fcadce7))
+
+
+
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/albertosantini/argo/compare/v6.0.3...v6.1.0) (2018-05-09)
+
+
+### Bug Fixes
+
+* **charts:** don't call the backend if filter is not changed ([4b7946d](https://github.com/albertosantini/argo/commit/4b7946d))
+* **deps:** audit dependencies ([d221d94](https://github.com/albertosantini/argo/commit/d221d94))
+
+
+
 <a name="6.0.3"></a>
 ## [6.0.3](https://github.com/albertosantini/argo/compare/v6.0.2...v6.0.3) (2018-03-15)
 

@@ -17,20 +17,18 @@ exports.closeTrade = closeTrade;
 exports.getPlugins = getPlugins;
 exports.engagePlugins = engagePlugins;
 
-const util = require("util"),
-    request = require("request"),
-    RateLimiter = require("limiter").RateLimiter,
+const RateLimiter = require("limiter").RateLimiter,
     config = require("./config"),
     stream = require("./stream"),
     plugin = require("../plugin/plugin");
 
+const util = require("../util");
+
 const limiter = new RateLimiter(1, 500); // at most 1 request every 500ms
 
-function throttledRequest() {
-    const requestArgs = arguments;
-
+function throttledRequest(...args) {
     limiter.removeTokens(1, () => {
-        request.apply(null, requestArgs);
+        util.request.apply(null, args);
     });
 }
 
@@ -125,7 +123,6 @@ function getCandles(req, response) {
             qs: {
                 granularity: req.body.granularity,
                 count: req.body.count,
-                alignmentTimezone: req.body.alignmentTimezone,
                 dailyAlignment: req.body.dailyAlignment
             },
             headers: {
@@ -223,11 +220,13 @@ function getTransactions(req, response) {
         const lastTransactionID = req.body.lastTransactionID;
         const id = lastTransactionID > 32 ? lastTransactionID - 32 : 0;
         const api = config.getUrl(req.body.environment, "api");
-        const url = `${api}/v3/accounts/${req.body.accountId}/transactions` +
-            `/sinceid?id=${id}`;
+        const url = `${api}/v3/accounts/${req.body.accountId}/transactions/sinceid`;
 
         throttledRequest({
             url,
+            qs: {
+                id
+            },
             headers: {
                 Authorization: `Bearer ${req.body.token}`
             }
